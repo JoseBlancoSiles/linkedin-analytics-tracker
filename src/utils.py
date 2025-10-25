@@ -1,7 +1,7 @@
 import csv
 import os
 
-def save_post_analytics_csv(all_analytics, filename="posts-analytics.csv", folder="data"):
+def convert_to_csv(all_analytics, filename="posts-analytics.csv", folder="data"):
     """
     Save LinkedIn post analytics to CSV with filtered and renamed fields
     for Google Sheets ingestion.

@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from linkedin_scraper import scrape_first_post_analytics, scrape_post_analytics_details
+from linkedin_scraper import scrape_first_post_analytics, scrape_post_analytics_details, scrape_analytics_url_last_20_posts
 import os
 import time
 
@@ -24,13 +24,13 @@ if __name__ == "__main__":
         driver.get("https://www.linkedin.com/in/josesilesb/recent-activity/shares/")
         time.sleep(5)
 
-        links = scrape_first_post_analytics(driver)
+        links = scrape_analytics_url_last_20_posts(driver)
         print("Scraped links:", links)
 
-        if links:
-            analytics_data = scrape_post_analytics_details(driver, links[0])
-        else:
-            print("⚠️ No analytics links found.")
+        # if links:
+        #     analytics_data = scrape_post_analytics_details(driver, links[0])
+        # else:
+        #     print("⚠️ No analytics links found.")
 
     finally:
         driver.quit()

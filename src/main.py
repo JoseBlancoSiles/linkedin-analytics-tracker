@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.webdriver import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from linkedin_scraper import scrape_all_post_analytics_details, scrape_analytics_url_last_20_posts
 import os
+from utils import convert_to_csv
 import time
 
 if __name__ == "__main__":
@@ -28,9 +29,9 @@ if __name__ == "__main__":
 
     if links:
         all_analytics = scrape_all_post_analytics_details(driver, links)
-        print("\n📊 All analytics data:")
-        for post in all_analytics:
-            print(post)
+
+    # Save filtered and renamed CSV
+        convert_to_csv(all_analytics)
     else:
         print("⚠️ No analytics links found.")
 

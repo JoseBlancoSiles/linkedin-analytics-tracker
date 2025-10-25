@@ -76,3 +76,14 @@ If using Google Sheets, make sure the service_account.json file is correctly pla
 The script will create the data/ folder automatically if it doesn't already exist.
 
 ![Final Analytics Table](image.png)
+
+## To Improve
+
+In following coding sessions I plan to add:
+- Automatically scrap the HOOK and the CTA
+- Autogenerate KPIs columns like:
+  - Followers/Impression
+  - Likes/Impression
+  
+And even a formula to rank the top performant posts!
+If you have any idea, please hit me up and contribute. 

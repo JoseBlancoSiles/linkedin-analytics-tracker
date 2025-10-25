@@ -42,7 +42,7 @@ def scrape_analytics_url_last_20_posts(driver, max_posts=20):
             break
 
     if links:
-        print(f"✅ Collected {len(links)} analytics links.")
+        print(f"Collected {len(links)} analytics links.")
     else:
         print("⚠️ No analytics links found.")
 
@@ -114,12 +114,12 @@ def scrape_all_post_analytics_details(driver, analytics_urls):
                 except:
                     continue
 
-            print(f"✅ Scraped analytics for post {i}: {len(post_data)} metrics")
+            print(f"Scraped analytics for post {i}: {len(post_data)} metrics")
             all_data.append(post_data)
 
         except Exception as e:
             print(f"⚠️ Could not scrape analytics for {url}: {e}")
             all_data.append(post_data)
 
-    print(f"\n📦 Finished scraping {len(all_data)} posts.")
+    print(f"\nFinished scraping {len(all_data)} posts.")
     return all_data

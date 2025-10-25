@@ -1,18 +1,19 @@
 import csv
 import os
 import gspread
+from dotenv import load_dotenv
 from google.oauth2.service_account import Credentials
 
 def convert_to_csv(all_analytics, filename="posts-analytics.csv", folder="data"):
     """
-    Save LinkedIn post analytics to CSV with filtered and renamed fields
-    for Google Sheets ingestion.
+    Receives a list of dictionaries with LinkedIn post analytics
+    and saves them to a CSV file for Google Sheets ingestion.
     
     Desired CSV structure:
     URL, Impressions, Likes, Comments, Followers, Reposts, Saves, Sends
     """
     if not all_analytics:
-        print("⚠️ No analytics data to save.")
+        print("No analytics data to save.")
         return
 
     os.makedirs(folder, exist_ok=True)
@@ -42,21 +43,29 @@ def convert_to_csv(all_analytics, filename="posts-analytics.csv", folder="data")
         writer.writeheader()
         writer.writerows(processed_data)
 
-    print(f"✅ Post analytics saved to CSV: {path}")
+    print(f"Post analytics saved to CSV: {path}")
     
 
-def append_to_google_sheet(all_analytics, spreadsheet_id="166iro0j2OPew8fA78w2NQIELgpaZWcmpTR2gXl9I0Sg", worksheet_name="posts"):
+def append_to_google_sheet(all_analytics, worksheet_name="posts"):
     """
     Append LinkedIn analytics to Google Sheet without headers.
+    The first time, make sure the sheet has the correct headers:
+    URL, Impressions, Likes, Comments, Followers, Reposts, Saves, Sends.
+    You can customize the spreadsheet_id and worksheet_name if needed.
     """
+    # This is the key file for Google Service Account authentication. Make sure it's in the same directory as this script.
     SERVICE_ACCOUNT_FILE = os.path.join(os.path.dirname(__file__), "service_account.json")
-    spreadsheet_id = "17oBPHGxD64iSdVp1pK72MItARyOdfLIRZO6DQipNs9U"
-    worksheet_name = "posts"
-
+    
+    # Load spreadsheet_id from .env file. You can find it in the URL of your Google Sheet.
+    spreadsheet_id = os.getenv("SPREADSHEET_ID")
+    if not spreadsheet_id:
+        print("Spreadsheet ID not found in environment variables.")
+        return
+    
     creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE,scopes=["https://www.googleapis.com/auth/spreadsheets"])
     
     if not all_analytics:
-        print("⚠️ No analytics data to append.")
+        print("No analytics data to append.")
         return
 
     headers_order = ["URL", "Impressions", "Likes", "Comments", "Followers", "Reposts", "Saves", "Sends"]
@@ -87,4 +96,4 @@ def append_to_google_sheet(all_analytics, spreadsheet_id="166iro0j2OPew8fA78w2NQ
 
     # Append rows without headers
     sheet.append_rows(rows, value_input_option="USER_ENTERED")
-    print(f"✅ Appended {len(rows)} rows to Google Sheet '{worksheet_name}'.")
+    print(f"Appended {len(rows)} rows to Linkedin Analytics in the Sheet:'{worksheet_name}'.")

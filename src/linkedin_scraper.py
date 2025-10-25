@@ -8,8 +8,7 @@ def scrape_first_post_analytics(driver):
     Scrape the analytics link of the first LinkedIn post in the feed.
     Works with the current LinkedIn DOM structure.
     """
-    # Wait a bit to ensure content loads
-    time.sleep(5)
+    time.sleep(5)  # allow feed to load
     driver.execute_script("window.scrollTo(0, 500);")
     time.sleep(2)
 
@@ -38,3 +37,57 @@ def scrape_first_post_analytics(driver):
     except Exception as e:
         print(f"⚠️ Could not find analytics link: {e}")
         return []
+
+def scrape_post_analytics_details(driver, analytics_url):
+    """
+    Scrape all available metrics from the LinkedIn post analytics page.
+    Returns a dictionary of {metric_name: value}.
+    """
+    try:
+        driver.get(analytics_url)
+        time.sleep(5)  # wait for React content
+
+        analytics_data = {}
+
+        # --- Top metrics (Impressions, Members reached) ---
+        top_items = driver.find_elements(
+            By.CSS_SELECTOR, "ul.member-analytics-addon-summary > li.member-analytics-addon-summary__list-item"
+        )
+        for li in top_items:
+            try:
+                value = li.find_element(By.CSS_SELECTOR, "div.display-flex > p.text-body-medium-bold").get_attribute("innerText").strip()
+                label = li.find_element(By.CSS_SELECTOR, "p.member-analytics-addon-list-item__description").get_attribute("innerText").strip()
+                analytics_data[label] = value
+            except:
+                continue
+
+        # --- Profile metrics (Profile viewers, Followers gained) ---
+        profile_items = driver.find_elements(
+            By.CSS_SELECTOR, "ul.list-style-none.t-14 li.member-analytics-addon-metric-row-list__item"
+        )
+        for li in profile_items:
+            try:
+                label = li.find_element(By.CSS_SELECTOR, "span.member-analytics-addon-metric-row-list-item__title--color").get_attribute("innerText").strip()
+                value = li.find_element(By.CSS_SELECTOR, "span.member-analytics-addon-metric-row-list-item__value").get_attribute("innerText").strip()
+                analytics_data[label] = value
+            except:
+                continue
+
+        # --- Social engagement (Reactions, Comments, Reposts, Saves, Sends) ---
+        social_items = driver.find_elements(
+            By.CSS_SELECTOR, "ul[aria-labelledby] li.member-analytics-addon__cta-list-item"
+        )
+        for li in social_items:
+            try:
+                label = li.find_element(By.CSS_SELECTOR, "span.member-analytics-addon__cta-list-item-title").get_attribute("innerText").strip()
+                value = li.find_element(By.CSS_SELECTOR, "span.member-analytics-addon__cta-list-item-text").get_attribute("innerText").strip()
+                analytics_data[label] = value
+            except:
+                continue
+
+        print("📊 Scraped analytics data:", analytics_data)
+        return analytics_data
+
+    except Exception as e:
+        print(f"⚠️ Could not scrape analytics details: {e}")
+        return {}

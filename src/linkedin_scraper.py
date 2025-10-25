@@ -2,12 +2,16 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-def scrape_analytics_url_last_20_posts(driver, max_posts=20):
+def scrape_analytics_url_last_20_posts(driver, max_posts=2):
     """
     Scrape analytics links of up to `max_posts` LinkedIn posts.
     Ignores posts without "View analytics".
     Returns a list of URLs like:
     ["https://www.linkedin.com/analytics/post-summary/urn:li:activity:7387770724196716544/", ...]
+    
+    Requirements:
+    - Chrome browser must be installed and accessible via Selenium WebDriver.
+    - The user must be logged into LinkedIn in the browser session controlled by Selenium.
     """
     links = []
     wait = WebDriverWait(driver, 10)
@@ -45,7 +49,7 @@ def scrape_analytics_url_last_20_posts(driver, max_posts=20):
             print(f"Could not find analytics span in this scroll: {e}")
 
         # Stop if reached bottom
-        if len(links) >= max_posts in driver.page_source:
+        if len(links) >= max_posts:
             break
 
     if links:

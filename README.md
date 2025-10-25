@@ -74,3 +74,5 @@ Notes
 Ensure the .env file is properly configured before running the script.
 If using Google Sheets, make sure the service_account.json file is correctly placed and the API is enabled.
 The script will create the data/ folder automatically if it doesn't already exist.
+
+![Final Analytics Table](image.png)

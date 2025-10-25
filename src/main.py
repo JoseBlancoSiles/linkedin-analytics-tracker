@@ -2,17 +2,16 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from linkedin_scraper import scrape_first_post_analytics
-import time
+from linkedin_scraper import scrape_first_post_analytics, scrape_post_analytics_details
 import os
+import time
 
 if __name__ == "__main__":
-    print("🚀 Starting LinkedIn Analytics Scraper...")
+    print("Starting LinkedIn Analytics Scraper...")
 
     options = Options()
     options.add_argument("--start-maximized")
 
-    # Dedicated Selenium profile folder
     selenium_profile = r"C:\Users\HP\AppData\Local\Google\Chrome\SeleniumProfile"
     os.makedirs(selenium_profile, exist_ok=True)
 
@@ -21,12 +20,17 @@ if __name__ == "__main__":
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    # Go directly to your LinkedIn activity feed
-    driver.get("https://www.linkedin.com/in/josesilesb/recent-activity/shares/")
-    time.sleep(5)  # wait for page to load
+    try:
+        driver.get("https://www.linkedin.com/in/josesilesb/recent-activity/shares/")
+        time.sleep(5)
 
-    # Scrape first post analytics link
-    links = scrape_first_post_analytics(driver)
-    print("Scraped links:", links)
+        links = scrape_first_post_analytics(driver)
+        print("Scraped links:", links)
 
-    driver.quit()
+        if links:
+            analytics_data = scrape_post_analytics_details(driver, links[0])
+        else:
+            print("⚠️ No analytics links found.")
+
+    finally:
+        driver.quit()

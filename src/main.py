@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.webdriver import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from linkedin_scraper import scrape_first_post_analytics, scrape_post_analytics_details, scrape_analytics_url_last_20_posts
+from linkedin_scraper import scrape_all_post_analytics_details, scrape_analytics_url_last_20_posts
 import os
 import time
 
@@ -20,17 +20,18 @@ if __name__ == "__main__":
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    try:
-        driver.get("https://www.linkedin.com/in/josesilesb/recent-activity/shares/")
-        time.sleep(5)
+    driver.get("https://www.linkedin.com/in/josesilesb/recent-activity/shares/")
+    time.sleep(5)
 
-        links = scrape_analytics_url_last_20_posts(driver)
-        print("Scraped links:", links)
+    links = scrape_analytics_url_last_20_posts(driver)
+    print(f"\nTotal links collected: {len(links)}")
 
-        # if links:
-        #     analytics_data = scrape_post_analytics_details(driver, links[0])
-        # else:
-        #     print("⚠️ No analytics links found.")
+    if links:
+        all_analytics = scrape_all_post_analytics_details(driver, links)
+        print("\n📊 All analytics data:")
+        for post in all_analytics:
+            print(post)
+    else:
+        print("⚠️ No analytics links found.")
 
-    finally:
-        driver.quit()
+    driver.quit()

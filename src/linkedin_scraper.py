@@ -3,7 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-def scrape_analytics_url_last_20_posts(driver, max_posts=20):
+def scrape_analytics_url_last_20_posts(driver, max_posts=20): # increase or decrease max_posts as needed
     """
     Scrape analytics links of up to `max_posts` LinkedIn posts.
     Ignores posts without "View analytics".

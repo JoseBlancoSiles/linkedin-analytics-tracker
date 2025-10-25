@@ -6,6 +6,7 @@ from linkedin_scraper import scrape_all_post_analytics_details, scrape_analytics
 import os
 from utils import convert_to_csv
 import time
+from utils import append_to_google_sheet
 
 if __name__ == "__main__":
     print("Starting LinkedIn Analytics Scraper...")
@@ -30,8 +31,11 @@ if __name__ == "__main__":
     if links:
         all_analytics = scrape_all_post_analytics_details(driver, links)
 
-    # Save filtered and renamed CSV
+        # Optional CSV backup
         convert_to_csv(all_analytics)
+
+        # Append to Google Sheet
+        append_to_google_sheet(all_analytics)
     else:
         print("⚠️ No analytics links found.")
 

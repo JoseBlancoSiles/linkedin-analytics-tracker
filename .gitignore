@@ -208,3 +208,6 @@ __marimo__/
 
 data/*.csv
 credentials.json
+
+*.json
+service_account.json

@@ -38,6 +38,51 @@ def scrape_first_post_analytics(driver):
         print(f"⚠️ Could not find analytics link: {e}")
         return []
 
+def scrape_analytics_url_last_20_posts(driver, max_posts=20):
+    """
+    Scrape analytics links of up to `max_posts` LinkedIn posts.
+    Ignores posts without "View analytics".
+    """
+    links = []
+    wait = WebDriverWait(driver, 10)
+    scroll_pause = 3
+    scroll_position = 0
+
+    while len(links) < max_posts:
+        time.sleep(2)
+        driver.execute_script(f"window.scrollTo(0, {scroll_position});")
+        scroll_position += 1000
+        time.sleep(scroll_pause)
+
+        try:
+            # Find all "View analytics" spans currently visible
+            analytics_spans = driver.find_elements(By.XPATH, "//span[text()='View analytics']")
+            for span in analytics_spans:
+                try:
+                    post_container = span.find_element(By.XPATH, "./ancestor::div[@data-urn]")
+                    post_urn = post_container.get_attribute("data-urn")
+                    href = f"https://www.linkedin.com/analytics/post-summary/{post_urn}/"
+                    if href not in links:
+                        links.append(href)
+                        print(f"📎 Found analytics link ({len(links)}): {href}")
+                        if len(links) >= max_posts:
+                            break
+                except:
+                    continue
+        except Exception as e:
+            print(f"⚠️ Could not find analytics span in this scroll: {e}")
+
+        # Stop if reached bottom
+        if len(links) >= max_posts or "You're all caught up" in driver.page_source:
+            break
+
+    if links:
+        print(f"✅ Collected {len(links)} analytics links.")
+    else:
+        print("⚠️ No analytics links found.")
+
+    return links
+
 def scrape_post_analytics_details(driver, analytics_url):
     """
     Scrape all available metrics from the LinkedIn post analytics page.

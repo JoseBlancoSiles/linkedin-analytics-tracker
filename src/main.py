@@ -46,7 +46,7 @@ if __name__ == "__main__":
         convert_to_csv(all_analytics)
 
         # Append to Google Sheet
-        append_to_google_sheet(all_analytics)
+        append_to_google_sheet(all_analytics) # Comment this line if you plan to use only CSV backup
     else:
         print("No analytics links found.")
 

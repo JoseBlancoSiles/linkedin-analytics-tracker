@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ### Configure the .env File
 Create a .env file in the root directory of the project. This file is used to store sensitive environment variables. Add the following:
 
-SELENIUM_PROFILE=C:\Users\HP\AppData\Local\Google\Chrome\SeleniumProfile
+SELENIUM_PROFILE=C:\Users\HP\AppData\Local\Google\Chrome\SeleniumProfile Replace with your path.
 
 LINKEDIN_USERNAME: Your LinkedIn username. For example, if your LinkedIn profile URL is https://www.linkedin.com/in/josesilesb/, your username is josesilesb.
 
@@ -43,13 +43,17 @@ SPREADSHEET_ID: The ID of your Google Sheet, which can be found in the URL of th
 ## Google Sheets Integration (Optional)
 If you want to append the analytics data to a Google Sheet, follow these steps:
 
-### Create a Google Sheet
+Create a Google Sheet
+
 Open Google Sheets and create a new spreadsheet.
-Add the following headers in the first row
+Add the following headers in the first row:
 
+```bash
 URL, Impressions, Likes, Comments, Followers, Reposts, Saves, Sends
+```
 
-### Enable the Google Sheets API
+Enable the Google Sheets API
+
 Go to the Google Cloud Console.
 
 Create a new project or select an existing one.

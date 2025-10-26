@@ -103,7 +103,7 @@ The script will create the data/ folder automatically if it doesn't already exis
 
 You will have something like this!
 
-![Final Analytics Table](image.png)
+![Final Analytics Table](image-4.png)
 
 I hope this helps you to grow your LinkedIn profile!
 
